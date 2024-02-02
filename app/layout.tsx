@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "EvextPlanner",
   description: "EvextPlanner manage your events",
   icons: {
-    icon: "/assets/images/logo.svg",
+    icon: "/assets/images/logo.png",
   },
 };
 
