@@ -1,7 +1,7 @@
 "use server";
 
 import Stripe from "stripe";
-import { CheckoutOrderParams } from "@/types";
+import { CheckoutOrderParams, CreateOrderParams } from "@/types";
 import { redirect } from "next/navigation";
 import { handleError } from "../utils";
 import { connectToDatabase } from "../database";
@@ -40,7 +40,7 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
   }
 };
 
-export const createOrder = async (order: CheckoutOrderParams) => {
+export const createOrder = async (order: CreateOrderParams) => {
   try {
     await connectToDatabase();
 
