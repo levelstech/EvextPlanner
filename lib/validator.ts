@@ -9,8 +9,8 @@ export const eventFormSchema = z.object({
     .min(3, {
       message: "Description must be at least 3 characters.",
     })
-    .max(400, {
-      message: "Description must be at most 400 characters.",
+    .max(500, {
+      message: "Description must be at most 500 characters.",
     }),
   location: z
     .string()
@@ -23,7 +23,9 @@ export const eventFormSchema = z.object({
   imageUrl: z.string().url("Image URL must be a valid URL."),
   startDateTime: z.date(),
   endDateTime: z.date(),
-  categoryId: z.string(),
+  categoryId: z
+    .string()
+    .min(1, { message: "A category must be at least 1 character long." }),
   price: z.string(),
   isFree: z.boolean(),
   url: z.string().url("URL must be a valid URL."),
