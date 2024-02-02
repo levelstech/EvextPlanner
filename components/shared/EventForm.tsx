@@ -24,16 +24,26 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useUploadThing } from "@/lib/uploadthing";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
-import { createEvent } from "@/lib/actions/event.actions";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
+import { IEvent } from "@/lib/database/models/event.model";
 
 type EventFormProps = {
   userId: string;
+  event?: IEvent;
+  eventId?: string;
   type: "Create" | "Update";
 };
 
-const EventForm = ({ userId, type }: EventFormProps) => {
+const EventForm = ({ userId, event, eventId, type }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const initalValues = eventDefaultValues;
+  const initalValues =
+    event && type == "Update"
+      ? {
+          ...event,
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
   const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
@@ -44,13 +54,15 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    let uploadeImageUrl = values.url;
+    let uploadeImageUrl = values.imageUrl;
     if (files.length > 0) {
       const uploadImages = await startUpload(files);
 
       if (!uploadImages) {
         return;
       }
+
+      console.log(uploadImages);
 
       uploadeImageUrl = uploadImages[0].url;
     }
@@ -66,6 +78,25 @@ const EventForm = ({ userId, type }: EventFormProps) => {
           form.reset();
           setFiles([]);
           router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (type === "Update") {
+      if (!eventId) {
+        router.back();
+        return;
+      }
+      try {
+        const updatedEvent = await updateEvent({
+          userId,
+          event: { ...values, imageUrl: uploadeImageUrl, _id: eventId },
+          path: `/events/${eventId}`,
+        });
+        if (updatedEvent) {
+          form.reset();
+          setFiles([]);
+          router.push(`/events/${updatedEvent._id}`);
         }
       } catch (error) {
         console.log(error);
