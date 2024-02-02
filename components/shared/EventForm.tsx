@@ -42,6 +42,7 @@ const EventForm = ({ userId, event, eventId, type }: EventFormProps) => {
           ...event,
           startDateTime: new Date(event.startDateTime),
           endDateTime: new Date(event.endDateTime),
+          categoryId: event.category._id,
         }
       : eventDefaultValues;
   const router = useRouter();
@@ -61,8 +62,6 @@ const EventForm = ({ userId, event, eventId, type }: EventFormProps) => {
       if (!uploadImages) {
         return;
       }
-
-      console.log(uploadImages);
 
       uploadeImageUrl = uploadImages[0].url;
     }
