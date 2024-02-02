@@ -41,7 +41,7 @@ export default async function Home() {
           className="wrapper my-8 flex flex-col gap-8 md:gap-12"
         >
           <h2 className="h2-bold">
-            Trust by <br /> Thousand of Events
+            Trusted by <br /> Thousand of Events
           </h2>
           <div className="flex w-full flex-col gap5 md:flex-row">
             Search CatergoryFilter
